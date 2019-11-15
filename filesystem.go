@@ -216,7 +216,7 @@ func ValidateFileOrParentDir(filename string) (fullpath string, err error) {
 
 	// Is parent directory valid
 	dirname = filepath.Dir(fullpath)
-	fileInfo, err = os.Stat(dirname)
+	_, err = os.Stat(dirname)
 	if os.IsNotExist(err) {
 		err = fmt.Errorf("parent directory %s does not exist", dirname)
 		return

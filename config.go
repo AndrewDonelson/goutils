@@ -168,10 +168,10 @@ func ReadConfigFiles(data interface{}, idName string, filenames ...string) (resu
 			// Find element Id by json tag or field name
 			v = nil
 			if tag {
-				v, _ = parsed.ElementMap[idTag]
+				v = parsed.ElementMap[idTag]
 			}
 			if v == nil {
-				v, _ = parsed.ElementMap[idName]
+				v = parsed.ElementMap[idName]
 			}
 			if v == nil {
 				errList = append(errList, fmt.Sprintf("required id parameter %s not found, skipping [%s]",
@@ -205,10 +205,10 @@ func ReadConfigFiles(data interface{}, idName string, filenames ...string) (resu
 				// Find element Id by json tag or field name
 				v = nil
 				if tag {
-					v, _ = parsed.ElementMap[idTag]
+					v = parsed.ElementMap[idTag]
 				}
 				if v == nil {
-					v, _ = parsed.ElementMap[idName]
+					v = parsed.ElementMap[idName]
 				}
 				if v == nil {
 					errList = append(errList, fmt.Sprintf("required id parameter %s not found, skipping [%s:elem#%d]",
@@ -364,7 +364,10 @@ func parseConfig(st reflect.Type, sv reflect.Value, parsedMap ParsedMap, errList
 
 		// Clear data object for next element Id
 		if clear {
-			clearConfig(st, sv, clearParamMap)
+			err = clearConfig(st, sv, clearParamMap)
+			if err != nil {
+				golog.Log.Warningf("Error clear data object: %v", err)
+			}
 		}
 	}
 	return
@@ -482,7 +485,7 @@ func validateParameters(st reflect.Type, parsedMap ParsedMap, errList *ErrList) 
 			}
 
 			// load unusedParamMap to identify possible unused parameters
-			for key, _ = range parsed.ElementMap {
+			for key = range parsed.ElementMap {
 				// lookup element key by tag name first
 				paramName, ok = tag2param[key]
 				if !ok {
@@ -524,5 +527,4 @@ func validateParameters(st reflect.Type, parsedMap ParsedMap, errList *ErrList) 
 			}
 		}
 	}
-	return
 }
