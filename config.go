@@ -14,11 +14,11 @@ import (
 )
 
 const (
-	// Prevent infinite loops
-	MAX_ITERATIONS = 100
+	// MaxIterations Prevents infinite loops
+	MaxIterations = 100
 )
 
-// Parsed{} contains each JSON element, remembering where it was found
+// Parsed contains each JSON element, remembering where it was found
 // - DistinctName is shortest unique name across all filenames
 // - Position is element # within the file: 0 if single element, 1...N if array of N elements
 type Parsed struct {
@@ -31,14 +31,14 @@ type Parsed struct {
 // ElementMap is the JSON element parsed into a key-value map
 type ElementMap map[string]interface{}
 
-// When mutiple files are parsed, a field in each element is specified as the Id
+// ParsedMap When mutiple files are parsed, a field in each element is specified as the Id
 // - This element Id is used as the ParsedMap key (so becomes a required field)
 type ParsedMap map[string][]Parsed
 
-// The Parsed map form is then collapsed into a single data object result per Id
+// ResultMap The Parsed map form is then collapsed into a single data object result per Id
 type ResultMap map[string]interface{}
 
-// Read a single config file, return a struct, where 'data' is a pointer to that struct
+// ReadConfigFile Read a single config file, return a struct, where 'data' is a pointer to that struct
 func ReadConfigFile(data interface{}, filename string) (err error) {
 	var b []byte
 	var errList ErrList
@@ -97,7 +97,7 @@ func ReadConfigFile(data interface{}, filename string) (err error) {
 	return
 }
 
-// Read a list of config files into a map of structs, where 'data' points to struct and idName is field for map key
+// ReadConfigFiles Read a list of config files into a map of structs, where 'data' points to struct and idName is field for map key
 // - Can configure an application using one or more JSON files
 // - For example, put general settings in one file, credentials in a second file.
 func ReadConfigFiles(data interface{}, idName string, filenames ...string) (resultMap ResultMap, err error) {
@@ -245,7 +245,7 @@ func ReadConfigFiles(data interface{}, idName string, filenames ...string) (resu
 	return
 }
 
-// Parse config dataMap entries corresponding to data object (st, sv) fields
+// parseConfig Parse config dataMap entries corresponding to data object (st, sv) fields
 // - Allows values to be numbers, strings, dates, datetimes, or durations
 // - Numbers can be specified as a string or value
 // - Errors if extra parameters configured
@@ -373,6 +373,7 @@ func parseConfig(st reflect.Type, sv reflect.Value, parsedMap ParsedMap, errList
 	return
 }
 
+// clearConfig ...
 func clearConfig(st reflect.Type, sv reflect.Value, clearParamMap map[string]bool) (err error) {
 	var paramType string
 	var zeroD time.Duration
@@ -411,7 +412,7 @@ func clearConfig(st reflect.Type, sv reflect.Value, clearParamMap map[string]boo
 	return
 }
 
-// Check data object (st) fields for any conflicting result map values
+// validateParameters Check data object (st) fields for any conflicting result map values
 func validateParameters(st reflect.Type, parsedMap ParsedMap, errList *ErrList) {
 	var filenames []string
 	var elementId, key, filename, tagName, paramName, paramValue string

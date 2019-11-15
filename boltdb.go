@@ -8,8 +8,10 @@ import (
 	"github.com/boltdb/bolt"
 )
 
+// BoltDB global access to BoltDB resource
 var BoltDB *bolt.DB
 
+// ConnectBolt given a filename (usually fromt he config) will open boltDB
 func ConnectBolt(file string) (err error) {
 
 	golog.Log.Infof("Connecting to BoltDB at %s", file)
@@ -18,6 +20,7 @@ func ConnectBolt(file string) (err error) {
 	return
 }
 
+// InitializeBolt creates a new BoltDB resource
 func InitializeBolt(file string) (err error) {
 	golog.Log.Infof("Initializing BoltDB at %s", file)
 

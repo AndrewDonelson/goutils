@@ -9,8 +9,12 @@ import (
 	"time"
 )
 
-var DelayShutdown sync.WaitGroup
-var DelayReason string
+var (
+	// DelayShutdown ...
+	DelayShutdown sync.WaitGroup
+	// DelayReason ...
+	DelayReason string
+)
 
 // CatchShutdown is a helper function called via goroutine when you start your app
 // the only parameter required is the function you want to call to cleanup your app

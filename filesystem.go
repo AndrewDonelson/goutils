@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 )
 
+// FileDetail ...
 type FileDetail struct {
 	Name           string
 	DistinctName   string
@@ -13,14 +14,16 @@ type FileDetail struct {
 	PathComponents []string
 }
 
-// Create Parsed{} struct for each filename, validating and formatting names
+// DistinctFilenames Create Parsed{} struct for each filename, validating and formatting names
 func DistinctFilenames(filenames []string, errList *ErrList) (fileDetails []FileDetail) {
-	var err error
-	var file FileDetail
-	var items, newitems, remainitems []string
-	var filename, fullpath, dir, name string
-	var i int
-	var ok, distinct bool
+	var (
+		err                           error
+		file                          FileDetail
+		items, newitems, remainitems  []string
+		filename, fullpath, dir, name string
+		i                             int
+		ok, distinct                  bool
+	)
 
 	// Map to determine distinct names
 	usednames := make(map[string][]string)
@@ -57,7 +60,7 @@ func DistinctFilenames(filenames []string, errList *ErrList) (fileDetails []File
 		}
 
 		// Make list of file directory components in absolute path
-		for i = 0; i < MAX_ITERATIONS; i++ {
+		for i = 0; i < MaxIterations; i++ {
 			dir = filepath.Dir(dir)
 			name = filepath.Base(dir)
 			file.PathComponents = append(file.PathComponents, name)
@@ -77,7 +80,7 @@ func DistinctFilenames(filenames []string, errList *ErrList) (fileDetails []File
 		usednames[file.DistinctName] = items
 	}
 
-	for i = 0; i < MAX_ITERATIONS; i++ {
+	for i = 0; i < MaxIterations; i++ {
 		distinct = true
 
 		// Generate distinct names across all files
@@ -135,7 +138,7 @@ func DistinctFilenames(filenames []string, errList *ErrList) (fileDetails []File
 	return
 }
 
-// Validate if exists, and is type file
+// ValidateFile Validate if exists, and is type file
 func ValidateFile(filename string) (fullpath string, fileInfo os.FileInfo, err error) {
 
 	// Is filename valid
@@ -166,7 +169,7 @@ func ValidateFile(filename string) (fullpath string, fileInfo os.FileInfo, err e
 	return
 }
 
-// Validate if exists, and is type directory
+// ValidateDir Validate if exists, and is type directory
 func ValidateDir(filename string) (fullpath string, dirInfo os.FileInfo, err error) {
 
 	// Is filename valid
@@ -197,7 +200,7 @@ func ValidateDir(filename string) (fullpath string, dirInfo os.FileInfo, err err
 	return
 }
 
-// Validate if exists, and is type file
+// ValidateFileOrParentDir Validate if exists, and is type file
 // Or parent directory valid, because file is to be created
 func ValidateFileOrParentDir(filename string) (fullpath string, err error) {
 	var fileInfo os.FileInfo
