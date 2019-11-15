@@ -20,6 +20,7 @@ func HTML5PageLogin() string {
 	return HTML5Page("Member Login", HTML5FormLogin())
 }
 
+// HTML5PageNotImplemented returns a complete basic
 func HTML5PageNotImplemented(name string) string {
-	return HTML5Page("Forgot Password", "<h1>"+name+" Not yet implemented</h1>")
+	return HTML5Page("Not Implmented", "<h1>"+name+" Not yet implemented</h1>")
 }

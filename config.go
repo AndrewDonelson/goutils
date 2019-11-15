@@ -108,7 +108,7 @@ func ReadConfigFiles(data interface{}, idName string, filenames ...string) (resu
 	var fileDetails []FileDetail
 	var parsedMap ParsedMap
 	var parsedArr []Parsed
-	var k, elementId, idTag string
+	var k, elementID, idTag string
 	var i int
 	var ok, tag bool
 
@@ -178,16 +178,16 @@ func ReadConfigFiles(data interface{}, idName string, filenames ...string) (resu
 					idName, file.Name))
 				continue
 			}
-			elementId = fmt.Sprintf("%v", v)
+			elementID = fmt.Sprintf("%v", v)
 
 			// Add parsed to array and store in resultMap
-			parsedArr, ok = parsedMap[elementId]
+			parsedArr, ok = parsedMap[elementID]
 			if ok {
 				parsedArr = append(parsedArr, parsed)
 			} else {
 				parsedArr = []Parsed{parsed}
 			}
-			parsedMap[elementId] = parsedArr
+			parsedMap[elementID] = parsedArr
 
 		} else if k == "slice" {
 			golog.Log.Debugf("Parsing %d elements [%s]", len(config.([]interface{})), file.Name)
@@ -215,16 +215,16 @@ func ReadConfigFiles(data interface{}, idName string, filenames ...string) (resu
 						idName, file.Name, parsed.Position))
 					continue
 				}
-				elementId = fmt.Sprintf("%v", v)
+				elementID = fmt.Sprintf("%v", v)
 
 				// Add parsed to array and store in resultMap
-				parsedArr, ok = parsedMap[elementId]
+				parsedArr, ok = parsedMap[elementID]
 				if ok {
 					parsedArr = append(parsedArr, parsed)
 				} else {
 					parsedArr = []Parsed{parsed}
 				}
-				parsedMap[elementId] = parsedArr
+				parsedMap[elementID] = parsedArr
 			}
 		} else {
 			errList = append(errList, fmt.Sprintf("parsing config: unrecognized JSON type %q [%s]", k, file.Name))
@@ -251,7 +251,7 @@ func ReadConfigFiles(data interface{}, idName string, filenames ...string) (resu
 // - Errors if extra parameters configured
 func parseConfig(st reflect.Type, sv reflect.Value, parsedMap ParsedMap, errList *ErrList) (resultMap ResultMap) {
 	var err error
-	var elementId, filename, tagName, paramValue, paramType string
+	var elementID, filename, tagName, paramValue, paramType string
 	var v interface{}
 	var parsedArr []Parsed
 	var dur time.Duration
@@ -275,7 +275,7 @@ func parseConfig(st reflect.Type, sv reflect.Value, parsedMap ParsedMap, errList
 	clear = len(parsedMap) > 1
 
 	resultMap = make(ResultMap)
-	for elementId, parsedArr = range parsedMap {
+	for elementID, parsedArr = range parsedMap {
 
 		// Make map of parameter names that will need to be reset after parsing element
 		clearParamMap := make(map[string]bool)
@@ -312,7 +312,7 @@ func parseConfig(st reflect.Type, sv reflect.Value, parsedMap ParsedMap, errList
 						f, err = strconv.ParseFloat(paramValue, 64)
 						if err != nil {
 							errList.Addf("setting for %s invalid, parameter %s: float %s [%s]",
-								elementId, param.Name, paramValue, filename)
+								elementID, param.Name, paramValue, filename)
 							continue
 						}
 						sv.Field(i).SetFloat(f)
@@ -320,7 +320,7 @@ func parseConfig(st reflect.Type, sv reflect.Value, parsedMap ParsedMap, errList
 						n, err = strconv.ParseInt(paramValue, 10, 64)
 						if err != nil {
 							errList.Addf("setting for %s invalid, parameter %s: integer %s [%s]",
-								elementId, param.Name, paramValue, filename)
+								elementID, param.Name, paramValue, filename)
 							continue
 						}
 						sv.Field(i).SetInt(n)
@@ -328,7 +328,7 @@ func parseConfig(st reflect.Type, sv reflect.Value, parsedMap ParsedMap, errList
 						ok, err = strconv.ParseBool(paramValue)
 						if err != nil {
 							errList.Addf("setting for %s invalid, parameter %s: boolean %s [%s]",
-								elementId, param.Name, paramValue, filename)
+								elementID, param.Name, paramValue, filename)
 							continue
 						}
 						sv.Field(i).SetBool(ok)
@@ -336,7 +336,7 @@ func parseConfig(st reflect.Type, sv reflect.Value, parsedMap ParsedMap, errList
 						dur, err = time.ParseDuration(paramValue)
 						if err != nil {
 							errList.Addf("setting for %s invalid, parameter %s: duration %s [%s]",
-								elementId, param.Name, paramValue, filename)
+								elementID, param.Name, paramValue, filename)
 							continue
 						}
 						sv.Field(i).Set(reflect.ValueOf(dur))
@@ -347,20 +347,20 @@ func parseConfig(st reflect.Type, sv reflect.Value, parsedMap ParsedMap, errList
 						}
 						if err != nil {
 							errList.Addf("setting for %s invalid, parameter %s: date %s [%s]",
-								elementId, param.Name, paramValue, filename)
+								elementID, param.Name, paramValue, filename)
 							continue
 						}
 						sv.Field(i).Set(reflect.ValueOf(date))
 					default:
 						errList.Addf("setting for %s invalid, parameter %s: unsupported type %s [%s]",
-							elementId, param.Name, paramType, filename)
+							elementID, param.Name, paramType, filename)
 						continue
 					}
 				}
 			}
 		}
 		// Store data object in resultMap
-		resultMap[elementId] = sv.Interface()
+		resultMap[elementID] = sv.Interface()
 
 		// Clear data object for next element Id
 		if clear {
@@ -415,7 +415,7 @@ func clearConfig(st reflect.Type, sv reflect.Value, clearParamMap map[string]boo
 // validateParameters Check data object (st) fields for any conflicting result map values
 func validateParameters(st reflect.Type, parsedMap ParsedMap, errList *ErrList) {
 	var filenames []string
-	var elementId, key, filename, tagName, paramName, paramValue string
+	var elementID, key, filename, tagName, paramName, paramValue string
 	var parsedArr []Parsed
 	var paramValuesMap map[string][]string
 	var v interface{}
@@ -437,7 +437,7 @@ func validateParameters(st reflect.Type, parsedMap ParsedMap, errList *ErrList) 
 	}
 
 	// Validate parameters for each element
-	for elementId, parsedArr = range parsedMap {
+	for elementID, parsedArr = range parsedMap {
 
 		// make list of values for each parameter, with filenames found in
 		elementParamValuesMap := make(map[string]map[string][]string)
@@ -514,17 +514,17 @@ func validateParameters(st reflect.Type, parsedMap ParsedMap, errList *ErrList) 
 						paramValue, strings.Join(filenames, ",")))
 				}
 				errList.Addf("settings for %s conflict, parameter %s: %s",
-					elementId, paramName, strings.Join(conflicts, " != "))
+					elementID, paramName, strings.Join(conflicts, " != "))
 			}
 		}
 
 		// List  errors for unused parameters
 		for paramName, filenames = range unusedParamMap {
 			if len(filenames) == 1 {
-				errList.Addf("unused setting for %s, parameter %s [%s]", elementId, paramName, filenames[0])
+				errList.Addf("unused setting for %s, parameter %s [%s]", elementID, paramName, filenames[0])
 			} else {
 				errList.Addf("unused settings for %s, parameter %s: %d occurences [%s]",
-					elementId, paramName, len(filenames), strings.Join(filenames, ","))
+					elementID, paramName, len(filenames), strings.Join(filenames, ","))
 			}
 		}
 	}
