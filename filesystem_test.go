@@ -35,6 +35,6 @@ func TestValidateDir(t *testing.T) {
 
 	// test valid file that exists
 	_, _, err = ValidateDir("test/readonly.txt")
-	ok(t, err)
+	equals(t, err.Error(), "invalid, is not a directory [test/readonly.txt]")
 
 }

@@ -11,7 +11,7 @@ import (
 // BoltDB global access to BoltDB resource
 var BoltDB *bolt.DB
 
-// ConnectBolt given a filename (usually fromt he config) will open boltDB
+// ConnectBolt given a filename (usually from the config) will open boltDB
 func ConnectBolt(file string) (err error) {
 
 	golog.Log.Infof("Connecting to BoltDB at %s", file)
