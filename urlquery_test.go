@@ -41,12 +41,12 @@ func TestHandleNoParamsTrue(t *testing.T) {
 		equals(t, req.URL.String(), "/params/no")
 		ok, err := EnsureNoQueryParameters(req)
 		if err != nil {
-			rw.Write([]byte(`ERROR`))
+			_, _ = rw.Write([]byte(`ERROR`))
 			return
 		}
 		if ok {
 			// Send response to be tested
-			rw.Write([]byte(`OK`))
+			_, _ = rw.Write([]byte(`OK`))
 		}
 	}))
 	// Close the server when test finishes
@@ -67,12 +67,12 @@ func TestHandleNoParamsFalse(t *testing.T) {
 		equals(t, req.URL.String(), "/params/no?str='foobar'&int=5&bool=false")
 		ok, err := EnsureNoQueryParameters(req)
 		if err != nil {
-			rw.Write([]byte(`OK`))
+			_, _ = rw.Write([]byte(`OK`))
 			return
 		}
 		if ok {
 			// Send response to be tested
-			rw.Write([]byte(`ERROR`))
+			_, _ = rw.Write([]byte(`ERROR`))
 		}
 	}))
 	// Close the server when test finishes
@@ -95,12 +95,12 @@ func TestHandleGetQueryParamsOk(t *testing.T) {
 		qp, err := GetQueryParameter(req, "str", true, false, "")
 		if err != nil {
 			//equals(t, qp, "foobar")
-			rw.Write([]byte(`ERROR`))
+			_, _ = rw.Write([]byte(`ERROR`))
 			return
 		}
 		if qp == "foobar" {
 			// Send response to be tested
-			rw.Write([]byte(`OK`))
+			_, _ = rw.Write([]byte(`OK`))
 		}
 	}))
 	// Close the server when test finishes
@@ -122,12 +122,12 @@ func TestHandleGetQueryParamsDefault(t *testing.T) {
 		qp, err := GetQueryParameter(req, "str", true, true, "foobar")
 		if err != nil {
 			//equals(t, qp, "foobar")
-			rw.Write([]byte(`ERROR`))
+			_, _ = rw.Write([]byte(`ERROR`))
 			return
 		}
 		if qp == "foobar" {
 			// Send response to be tested
-			rw.Write([]byte(`OK`))
+			_, _ = rw.Write([]byte(`OK`))
 		}
 	}))
 	// Close the server when test finishes
@@ -149,11 +149,11 @@ func TestHandleGetQueryParamsRequireNoDefault(t *testing.T) {
 		_, err := GetQueryParameter(req, "str", true, false, "")
 		if err != nil {
 			//equals(t, qp, "foobar")
-			rw.Write([]byte(`OK`))
+			_, _ = rw.Write([]byte(`OK`))
 			return
 		}
 
-		rw.Write([]byte(`ERROR`))
+		_, _ = rw.Write([]byte(`ERROR`))
 
 	}))
 	// Close the server when test finishes
@@ -174,12 +174,12 @@ func TestHandleGetQueryParamsNotRequireDefault(t *testing.T) {
 		equals(t, req.URL.String(), "/params/yes?int=5&bool=false")
 		qp, err := GetQueryParameter(req, "str", false, true, "foobar")
 		if err != nil {
-			rw.Write([]byte(`ERROR`))
+			_, _ = rw.Write([]byte(`ERROR`))
 			return
 		}
 		if qp == "foobar" {
 			// Send response to be tested
-			rw.Write([]byte(`OK`))
+			_, _ = rw.Write([]byte(`OK`))
 		}
 
 	}))
@@ -201,12 +201,12 @@ func TestHandleGetQueryParamsNotRequireNoDefault(t *testing.T) {
 		equals(t, req.URL.String(), "/params/yes?int=5&bool=false")
 		qp, err := GetQueryParameter(req, "str", false, false, "")
 		if err != nil {
-			rw.Write([]byte(`ERROR`))
+			_, _ = rw.Write([]byte(`ERROR`))
 			return
 		}
 		if qp == "" {
 			// Send response to be tested
-			rw.Write([]byte(`OK`))
+			_, _ = rw.Write([]byte(`OK`))
 		}
 
 	}))
