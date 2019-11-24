@@ -12,12 +12,6 @@ func TestShutdownReason(t *testing.T) {
 	go CatchShutdown()
 }
 
-func count() {
-	for i := 0; i < 1000; i++ {
-		print("")
-	}
-}
-
 // func TestShutdownBusy(t *testing.T) {
 // 	go CatchShutdown()
 // 	go count()
