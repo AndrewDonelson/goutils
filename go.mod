@@ -1,4 +1,4 @@
-module github.com/AndrewDonelson/gutils
+module github.com/AndrewDonelson/goutils
 
 go 1.13
 
