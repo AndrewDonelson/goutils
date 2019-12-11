@@ -38,7 +38,7 @@ func TestHandleNoParamsTrue(t *testing.T) {
 	// Start a local HTTP server
 	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 		// Test request parameters
-		equals(t, req.URL.String(), "/params/no")
+		Equals(t, req.URL.String(), "/params/no")
 		ok, err := EnsureNoQueryParameters(req)
 		if err != nil {
 			_, _ = rw.Write([]byte(`ERROR`))
@@ -56,15 +56,15 @@ func TestHandleNoParamsTrue(t *testing.T) {
 
 	// Use Client & URL from our local test server noparams endpoint for no parameters
 	body, err := api.HandleParamsNo("/params/no")
-	ok(t, err)
-	equals(t, []byte("OK"), body)
+	Ok(t, err)
+	Equals(t, []byte("OK"), body)
 }
 
 func TestHandleNoParamsFalse(t *testing.T) {
 	// Start a local HTTP server
 	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 		// Test request parameters
-		equals(t, req.URL.String(), "/params/no?str='foobar'&int=5&bool=false")
+		Equals(t, req.URL.String(), "/params/no?str='foobar'&int=5&bool=false")
 		ok, err := EnsureNoQueryParameters(req)
 		if err != nil {
 			_, _ = rw.Write([]byte(`OK`))
@@ -82,8 +82,8 @@ func TestHandleNoParamsFalse(t *testing.T) {
 
 	// Use Client & URL from our local test server noparams endpoint for no parameters
 	body, err := api.HandleParamsNo("/params/no?str='foobar'&int=5&bool=false")
-	ok(t, err)
-	equals(t, []byte("OK"), body)
+	Ok(t, err)
+	Equals(t, []byte("OK"), body)
 
 }
 
@@ -91,10 +91,10 @@ func TestHandleGetQueryParamsOk(t *testing.T) {
 	// Start a local HTTP server
 	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 		// Test request parameters
-		equals(t, req.URL.String(), "/params/yes?str=foobar&int=5&bool=false")
+		Equals(t, req.URL.String(), "/params/yes?str=foobar&int=5&bool=false")
 		qp, err := GetQueryParameter(req, "str", true, false, "")
 		if err != nil {
-			//equals(t, qp, "foobar")
+			//Equals(t, qp, "foobar")
 			_, _ = rw.Write([]byte(`ERROR`))
 			return
 		}
@@ -110,18 +110,18 @@ func TestHandleGetQueryParamsOk(t *testing.T) {
 
 	// Use Client & URL from our local test server noparams endpoint for no parameters
 	body, err := api.HandleParamsNo("/params/yes?str=foobar&int=5&bool=false")
-	ok(t, err)
-	equals(t, []byte("OK"), body)
+	Ok(t, err)
+	Equals(t, []byte("OK"), body)
 }
 
 func TestHandleGetQueryParamsDefault(t *testing.T) {
 	// Start a local HTTP server
 	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 		// Test request parameters
-		equals(t, req.URL.String(), "/params/yes?int=5&bool=false")
+		Equals(t, req.URL.String(), "/params/yes?int=5&bool=false")
 		qp, err := GetQueryParameter(req, "str", true, true, "foobar")
 		if err != nil {
-			//equals(t, qp, "foobar")
+			//Equals(t, qp, "foobar")
 			_, _ = rw.Write([]byte(`ERROR`))
 			return
 		}
@@ -137,18 +137,18 @@ func TestHandleGetQueryParamsDefault(t *testing.T) {
 
 	// Use Client & URL from our local test server noparams endpoint for no parameters
 	body, err := api.HandleParamsNo("/params/yes?int=5&bool=false")
-	ok(t, err)
-	equals(t, []byte("OK"), body)
+	Ok(t, err)
+	Equals(t, []byte("OK"), body)
 }
 
 func TestHandleGetQueryParamsRequireNoDefault(t *testing.T) {
 	// Start a local HTTP server
 	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 		// Test request parameters
-		equals(t, req.URL.String(), "/params/yes?int=5&bool=false")
+		Equals(t, req.URL.String(), "/params/yes?int=5&bool=false")
 		_, err := GetQueryParameter(req, "str", true, false, "")
 		if err != nil {
-			//equals(t, qp, "foobar")
+			//Equals(t, qp, "foobar")
 			_, _ = rw.Write([]byte(`OK`))
 			return
 		}
@@ -163,15 +163,15 @@ func TestHandleGetQueryParamsRequireNoDefault(t *testing.T) {
 
 	// Use Client & URL from our local test server noparams endpoint for no parameters
 	body, err := api.HandleParamsNo("/params/yes?int=5&bool=false")
-	ok(t, err)
-	equals(t, []byte("OK"), body)
+	Ok(t, err)
+	Equals(t, []byte("OK"), body)
 }
 
 func TestHandleGetQueryParamsNotRequireDefault(t *testing.T) {
 	// Start a local HTTP server
 	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 		// Test request parameters
-		equals(t, req.URL.String(), "/params/yes?int=5&bool=false")
+		Equals(t, req.URL.String(), "/params/yes?int=5&bool=false")
 		qp, err := GetQueryParameter(req, "str", false, true, "foobar")
 		if err != nil {
 			_, _ = rw.Write([]byte(`ERROR`))
@@ -190,15 +190,15 @@ func TestHandleGetQueryParamsNotRequireDefault(t *testing.T) {
 
 	// Use Client & URL from our local test server noparams endpoint for no parameters
 	body, err := api.HandleParamsNo("/params/yes?int=5&bool=false")
-	ok(t, err)
-	equals(t, []byte("OK"), body)
+	Ok(t, err)
+	Equals(t, []byte("OK"), body)
 }
 
 func TestHandleGetQueryParamsNotRequireNoDefault(t *testing.T) {
 	// Start a local HTTP server
 	server := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 		// Test request parameters
-		equals(t, req.URL.String(), "/params/yes?int=5&bool=false")
+		Equals(t, req.URL.String(), "/params/yes?int=5&bool=false")
 		qp, err := GetQueryParameter(req, "str", false, false, "")
 		if err != nil {
 			_, _ = rw.Write([]byte(`ERROR`))
@@ -217,6 +217,6 @@ func TestHandleGetQueryParamsNotRequireNoDefault(t *testing.T) {
 
 	// Use Client & URL from our local test server noparams endpoint for no parameters
 	body, err := api.HandleParamsNo("/params/yes?int=5&bool=false")
-	ok(t, err)
-	equals(t, []byte("OK"), body)
+	Ok(t, err)
+	Equals(t, []byte("OK"), body)
 }
