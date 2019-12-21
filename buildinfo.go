@@ -21,7 +21,7 @@ func GetBuildInfo() (str string, err error) {
 	cmd = exec.Command("git", "rev-parse", "--abbrev-ref", "HEAD")
 	out, err = cmd.CombinedOutput()
 	if err != nil {
-		gitBranch = "unknown"
+		return "", err
 	}
 	gitBranch = string(out)
 	gitBranch, _ = StringToAlphaNumeric(gitBranch)
@@ -30,7 +30,7 @@ func GetBuildInfo() (str string, err error) {
 	cmd = exec.Command("git", "rev-parse", "--short", "HEAD")
 	out, err = cmd.CombinedOutput()
 	if err != nil {
-		gitCommit = "0000000"
+		return "", err
 	}
 	gitCommit = string(out)
 	gitCommit, _ = StringToAlphaNumeric(gitCommit)
@@ -39,7 +39,7 @@ func GetBuildInfo() (str string, err error) {
 	cmd = exec.Command("git", "diff", "--stat")
 	out, err = cmd.CombinedOutput()
 	if err != nil {
-		gitState = "Unknown"
+		return "", err
 	}
 	gitState = string(out)
 	if len(gitState) > 0 {
