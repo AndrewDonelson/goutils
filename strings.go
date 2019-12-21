@@ -33,7 +33,7 @@ func ValidateEmailAddress(email string) (err error) {
 	minLengthOk := len(email) >= 4
 
 	re := regexp.MustCompile("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$")
-	if !minLengthOk || (re.MatchString(email) == false) {
+	if !minLengthOk || (!re.MatchString(email)) {
 		err = fmt.Errorf("Email is not in a valid format")
 		return
 	}
